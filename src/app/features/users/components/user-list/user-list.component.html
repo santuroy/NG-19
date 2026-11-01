@@ -1,0 +1,43 @@
+<div class="page-container">
+
+  <div class="page-header">
+    <h1>User Management</h1>
+    <p>Manage your application users</p>
+  </div>
+
+  <!-- Dashboard Statistics -->
+  <div class="stats-container">
+
+    <div class="stat-card">
+      <h3>Total Users</h3>
+      <h2>{{ userStore.totalUsers() }}</h2>
+    </div>
+
+    <div class="stat-card">
+      <h3>Active Users</h3>
+      <h2>{{ userStore.activeUsers() }}</h2>
+    </div>
+
+    <div class="stat-card">
+      <h3>Inactive Users</h3>
+      <h2>{{ userStore.inactiveUsers() }}</h2>
+    </div>
+
+  </div>
+
+  <!-- Loading -->
+  @if (userStore.loading()) {
+    <p>Loading users...</p>
+  }
+
+  <!-- Error -->
+  @if (userStore.error()) {
+    <p class="error">{{ userStore.error() }}</p>
+  }
+
+  <!-- User Grid -->
+  @if (!userStore.loading() && !userStore.error()) {
+    <app-user-grid></app-user-grid>
+  }
+
+</div>

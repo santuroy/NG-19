@@ -1,0 +1,224 @@
+<div class="grid-container">
+
+  <!-- Grid Header -->
+  <div class="grid-header">
+
+    <div>
+      <h2>User List</h2>
+      <p>Manage and edit your users</p>
+    </div>
+
+    <button
+      type="button"
+      class="add-btn"
+      (click)="addRow()">
+
+      + Add User
+
+    </button>
+
+  </div>
+
+  <!-- Reactive Form -->
+  <form [formGroup]="form">
+
+    <div class="table-wrapper">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody formArrayName="users">
+
+          @for (row of userRows.controls; track row; let i = $index) {
+
+            <tr [formGroupName]="i">
+
+              <!-- ID -->
+              <td>
+                {{ row.get('id')?.value ?? 'New' }}
+              </td>
+
+              <!-- Name -->
+              <td>
+                @if (isEditing(row)) {
+
+                  <input
+                    type="text"
+                    formControlName="name"
+                    placeholder="Enter name">
+
+                  @if (row.get('name')?.touched && row.get('name')?.invalid) {
+                    <small class="error">Minimum 3 characters required</small>
+                  }
+
+                } @else {
+
+                  {{ row.get('name')?.value }}
+
+                }
+              </td>
+
+              <!-- Email -->
+              <td>
+                @if (isEditing(row)) {
+
+                  <input
+                    type="email"
+                    formControlName="email"
+                    placeholder="Enter email">
+
+                  @if (row.get('email')?.touched && row.get('email')?.invalid) {
+                    <small class="error">Enter a valid email</small>
+                  }
+
+                } @else {
+
+                  {{ row.get('email')?.value }}
+
+                }
+              </td>
+
+              <!-- Phone -->
+              <td>
+                @if (isEditing(row)) {
+
+                  <input
+                    type="text"
+                    formControlName="phone"
+                    maxlength="10"
+                    placeholder="Phone number">
+
+                  @if (row.get('phone')?.touched && row.get('phone')?.invalid) {
+                    <small class="error">Enter a valid 10-digit number</small>
+                  }
+
+                } @else {
+
+                  {{ row.get('phone')?.value }}
+
+                }
+              </td>
+
+              <!-- Role -->
+              <td>
+                @if (isEditing(row)) {
+
+                  <select formControlName="role">
+
+                    <option value="Admin">Admin</option>
+                    <option value="User">User</option>
+                    <option value="Editor">Editor</option>
+
+                  </select>
+
+                } @else {
+
+                  {{ row.get('role')?.value }}
+
+                }
+              </td>
+
+              <!-- Status -->
+              <td>
+                @if (isEditing(row)) {
+
+                  <select formControlName="status">
+
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+
+                  </select>
+
+                } @else {
+
+                  <span
+                    class="status"
+                    [class.active]="row.get('status')?.value === 'Active'"
+                    [class.inactive]="row.get('status')?.value === 'Inactive'">
+
+                    {{ row.get('status')?.value }}
+
+                  </span>
+
+                }
+              </td>
+
+              <!-- Actions -->
+              <td class="actions">
+
+                @if (isEditing(row)) {
+
+                  <button
+                    type="button"
+                    class="save-btn"
+                    (click)="saveRow(row, i)">
+
+                    Save
+
+                  </button>
+
+                  <button
+                    type="button"
+                    class="cancel-btn"
+                    (click)="cancelRow(row, i)">
+
+                    Cancel
+
+                  </button>
+
+                } @else {
+
+                  <button
+                    type="button"
+                    class="edit-btn"
+                    (click)="editRow(row)">
+
+                    Edit
+
+                  </button>
+
+                  <button
+                    type="button"
+                    class="delete-btn"
+                    (click)="deleteRow(row, i)">
+
+                    Delete
+
+                  </button>
+
+                }
+
+              </td>
+
+            </tr>
+
+          } @empty {
+
+            <tr>
+              <td colspan="7" class="empty-state">
+                No users found
+              </td>
+            </tr>
+
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </form>
+
+</div>
